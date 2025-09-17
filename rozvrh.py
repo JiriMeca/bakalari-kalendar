@@ -15,8 +15,8 @@ FILTER_WORDS = ["Molekulární biologie", "Přírodovědná cvičení", "Seminá
 #do tohoto listu vlož všechny skupiny ve kterých nejsi - když máš třeba půlenou hodinu....
 FILTER_GROUPS = ["JAZ1","SPJ2"]
 
-#zde vlož id kalendáře podle návodu
-CALENDAR_ID = "EXAMPLEa3f1755ba4631550a61c0f004cb906297e34@group.calendar.google.com"
+#zde vlož id kalendáře podle návodu nebo nech jak je pokud chceš použít základní kalendář
+CALENDAR_ID = "primary"
 #---------------------------------------------------------------------------------------------
 import datetime
 import time
