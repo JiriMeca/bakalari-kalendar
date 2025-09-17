@@ -15,6 +15,8 @@ FILTER_WORDS = ["Molekulární biologie", "Přírodovědná cvičení", "Seminá
 #do tohoto listu vlož všechny skupiny ve kterých nejsi - když máš třeba půlenou hodinu....
 FILTER_GROUPS = ["JAZ1","SPJ2"]
 
+#zde vlož id kalendáře podle návodu
+CALENDAR_ID = "EXAMPLEa3f1755ba4631550a61c0f004cb906297e34@group.calendar.google.com"
 #---------------------------------------------------------------------------------------------
 import datetime
 import time
@@ -29,7 +31,7 @@ import json
 import re
 import os
 
-SCOPES = ["https://www.googleapis.com/auth/calendar"]
+SCOPES = ["https://www.googleapis.com/auth/"]
 BAKALARI_USER = os.environ["BAKALARI_USER"]
 BAKALARI_PASS = os.environ["BAKALARI_PASS"]
 EVENT_TAG_KEY = "tag"
@@ -185,7 +187,7 @@ def filter_groups(lessons, filter_groups):
 
 # ====== Přidání / aktualizace eventů s tagem ======
 def add_or_update_events(lessons, creds):
-    service = build("calendar", "v3", credentials=creds)
+    service = build("", "v3", credentials=creds)
 
     for l in lessons:
         if not l["subject"] or not l["start"] or not l["end"]:
@@ -197,7 +199,7 @@ def add_or_update_events(lessons, creds):
 
         try:
             events_result = service.events().list(
-                calendarId="primary",
+                calendarId=CALENDAR_ID,
                 timeMin=l["start"],
                 timeMax=l["end"],
                 q=l["subject"],
@@ -250,7 +252,7 @@ def add_or_update_events(lessons, creds):
 
             if changes_made:
                 try:
-                    service.events().update(calendarId="primary", eventId=chosen_event["id"], body=chosen_event).execute()
+                    service.events().update(calendarId=CALENDAR_ID, eventId=chosen_event["id"], body=chosen_event).execute()
                     print(f"🔄 Aktualizováno / označeno: {l['subject']} ({location}) {l['start']}")
                 except Exception as e:
                     print(f"⚠️ Chyba při aktualizaci: {l['subject']}: {e}")
@@ -265,7 +267,7 @@ def add_or_update_events(lessons, creds):
                 "reminders": {"useDefault": False}
             }
             try:
-                service.events().insert(calendarId="primary", body=event).execute()
+                service.events().insert(calendarId=CALENDAR_ID, body=event).execute()
                 print(f"✅ Přidáno: {l['subject']} ({location}) {l['start']}")
             except Exception as e:
                 print(f"❌ Nepodařilo se přidat: {l['subject']}, chyba: {e}")
@@ -280,7 +282,7 @@ def remove_cancelled_lessons(lessons, creds):
 
     try:
         events_result = service.events().list(
-            calendarId="primary",
+            calendarId=CALENDAR_ID,
             timeMin=now_iso,
             timeMax=two_weeks_iso,
             singleEvents=True,
@@ -334,7 +336,7 @@ def remove_cancelled_lessons(lessons, creds):
 
         if should_delete:
             try:
-                service.events().delete(calendarId="primary", eventId=event["id"]).execute()
+                service.events().delete(calendarId=CALENDAR_ID, eventId=event["id"]).execute()
                 print(f"🗑 Smazáno (tag={EVENT_TAG_VALUE}, {reason}): {event.get('summary','?')} ({ev_start.isoformat()})")
                 time.sleep(DELETE_SLEEP)
             except Exception as e:
