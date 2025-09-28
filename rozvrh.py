@@ -1,5 +1,7 @@
 # ====== INSTRUKCE ======
 
+secret_name=""
+
 #zde přidej svou doménu která vede na login page
 LOGIN_URL = "https://bakalari.example.cz/bakaweb/login" 
 
@@ -50,7 +52,7 @@ def google_auth():
             creds.refresh(Request())
         else:
             # nahraď názvem svého souboru client secret
-            flow = InstalledAppFlow.from_client_secrets_file("client_secret_xxx.json", SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(secret_name, SCOPES)
             creds = flow.run_local_server(port=0)
         with open("token.pkl", "wb") as token:
             pickle.dump(creds, token)
