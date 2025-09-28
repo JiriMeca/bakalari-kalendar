@@ -189,7 +189,7 @@ def filter_groups(lessons, filter_groups):
 
 # ====== Přidání / aktualizace eventů s tagem ======
 def add_or_update_events(lessons, creds):
-    service = build("", "v3", credentials=creds)
+    service = build("calendar", "v3", credentials=creds)
 
     for l in lessons:
         if not l["subject"] or not l["start"] or not l["end"]:
