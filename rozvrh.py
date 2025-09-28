@@ -53,7 +53,7 @@ def google_auth():
         else:
             # nahraď názvem svého souboru client secret
             flow = InstalledAppFlow.from_client_secrets_file(secret_name, SCOPES)
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_console()
         with open("token.pkl", "wb") as token:
             pickle.dump(creds, token)
     return creds
